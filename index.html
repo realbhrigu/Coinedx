@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b14">
+  <title>ANIMEVERSE | Anime News & Updates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#090b14;--surface:#111522;--surface2:#181e2e;--accent:#a855f7;--accent2:#00e5ff;--text:#f5f5ff;--muted:#9299ae;--border:rgba(255,255,255,.08);--radius:18px}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    button,input{font-family:inherit}button{cursor:pointer}img{display:block;max-width:100%}.hidden{display:none!important}
+    #loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 20% 20%,#42116c55,transparent 40%),radial-gradient(circle at 80% 80%,#005e8050,transparent 40%),var(--bg)}
+    .login-card{width:100%;max-width:410px;padding:40px 30px;background:rgba(17,21,34,.95);border:1px solid var(--border);border-radius:24px;box-shadow:0 20px 80px #0008}
+    .logo{font-size:29px;font-weight:900;letter-spacing:-1.5px}.logo span{color:var(--accent)}.login-card .logo{text-align:center;margin-bottom:10px}
+    .login-subtitle{color:var(--muted);text-align:center;font-size:13px;margin-bottom:32px}
+    .login-card h2{font-size:23px;margin-bottom:8px}.login-card>p{color:var(--muted);font-size:13px;margin-bottom:25px}
+    .form-group{margin-bottom:18px}.form-group label{display:block;margin-bottom:8px;font-size:13px;font-weight:600}
+    .form-group input{width:100%;padding:14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;outline:none;color:white;transition:.3s}
+    .form-group input:focus{border-color:var(--accent);box-shadow:0 0 12px #a855f733}
+    .primary-btn{width:100%;padding:14px;background:linear-gradient(110deg,var(--accent),#7135e9);color:white;font-weight:700;font-size:14px;border:0;border-radius:10px;transition:.3s}
+    .primary-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px #a855f755}.primary-btn:disabled{opacity:.65;cursor:wait;transform:none}
+    .error-message{color:#ff6464;background:#ff333315;border:1px solid #ff333333;padding:11px;border-radius:8px;font-size:12px;margin-bottom:15px;display:none}
+    header{position:sticky;top:0;z-index:100;background:rgba(9,11,20,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+    .navbar{max-width:1250px;margin:auto;padding:17px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+    .nav-right{display:flex;align-items:center;gap:15px}.user-email{color:var(--muted);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+    .logout-btn{padding:9px 16px;color:white;background:#ff47571c;border:1px solid #ff475744;border-radius:8px;font-size:12px;font-weight:600;transition:.3s}.logout-btn:hover{background:#ff4757}
+    .container{max-width:1250px;margin:auto;padding:35px 22px 70px}.section-heading{font-size:23px;font-weight:800;margin-bottom:20px}.section-heading span{color:var(--accent)}
+    .featured{position:relative;height:430px;border-radius:22px;overflow:hidden;margin-bottom:45px;background:var(--surface)}
+    .featured>img{width:100%;height:100%;object-fit:cover;transition:.6s}.featured:hover>img{transform:scale(1.04)}
+    .featured-overlay{position:absolute;inset:0;background:linear-gradient(90deg,#080912ee 0%,#08091288 55%,transparent 100%);display:flex;align-items:end;padding:40px}
+    .featured-content{max-width:560px}.featured-label{display:inline-block;padding:7px 12px;background:var(--accent);color:white;font-size:10px;font-weight:800;letter-spacing:1px;border-radius:5px;margin-bottom:17px}
+    .featured-content h1{font-size:clamp(25px,4vw,43px);line-height:1.2;margin-bottom:14px}.featured-content p{color:#c7c9d5;font-size:13px;line-height:1.8;margin-bottom:20px}
+    .feed-controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;margin-bottom:25px}
+    .search-box{width:100%;max-width:320px;position:relative}.search-box input{width:100%;padding:13px 15px 13px 42px;background:var(--surface);color:white;border:1px solid var(--border);border-radius:10px;outline:none}
+    .search-box input:focus{border-color:var(--accent)}.search-icon{position:absolute;left:14px;top:12px;color:var(--muted)}
+    .filter-chips{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:28px}
+    .chip{padding:9px 16px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:30px;font-size:11px;font-weight:600;transition:.3s}
+    .chip:hover,.chip.active{background:var(--accent);color:white;border-color:var(--accent)}
+    .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .news-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:.35s;display:flex;flex-direction:column}
+    .news-card:hover{transform:translateY(-7px);border-color:#a855f788;box-shadow:0 12px 35px #0005}
+    .card-image{height:195px;overflow:hidden;background:var(--surface2)}.card-image img{width:100%;height:100%;object-fit:cover;transition:.5s}
+    .news-card:hover .card-image img{transform:scale(1.07)}.card-content{padding:20px;display:flex;flex-direction:column;flex:1}
+    .card-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}
+    .genre-tag{color:var(--accent2);background:#00e5ff12;border:1px solid #00e5ff30;padding:5px 9px;border-radius:5px;font-size:10px;font-weight:700}
+    .card-date{color:var(--muted);font-size:10px}.anime-name{color:var(--accent);font-size:11px;font-weight:700;margin-bottom:8px}
+    .card-content h3{font-size:17px;line-height:1.45;margin-bottom:10px}.card-content p{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+    .read-btn{margin-top:auto;width:fit-content;padding:10px 16px;background:#a855f71a;color:var(--accent);border:1px solid #a855f755;border-radius:8px;font-size:11px;font-weight:700;transition:.3s}
+    .read-btn:hover{background:var(--accent);color:white}.no-results{text-align:center;color:var(--muted);padding:50px 10px;grid-column:1/-1}
+    .modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:#000b;backdrop-filter:blur(8px)}
+    .modal.active{display:flex}.modal-content{width:100%;max-width:650px;max-height:90vh;overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:18px;animation:modalIn .3s ease}
+    @keyframes modalIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .modal-image{width:100%;height:260px;object-fit:cover}.modal-body{padding:25px}.modal-body h2{font-size:25px;line-height:1.4;margin:15px 0}
+    .modal-body p{color:var(--muted);font-size:13px;line-height:2;white-space:pre-line}
+    .modal-close{float:right;width:34px;height:34px;border:0;border-radius:50%;background:#ffffff15;color:white;font-size:20px}
+    footer{padding:28px 20px;text-align:center;border-top:1px solid var(--border);color:var(--muted);font-size:11px}footer span{color:var(--accent)}
+    @media(max-width:900px){.news-grid{grid-template-columns:repeat(2,1fr)}.featured{height:380px}}
+    @media(max-width:600px){.navbar{padding:15px}.logo{font-size:23px}.user-email{display:none}.container{padding:25px 15px 50px}
+      .featured{height:400px}.featured-overlay{padding:22px;background:linear-gradient(0deg,#080912f5 0%,#08091270 70%,transparent 100%)}
+      .featured-content p{font-size:12px}.news-grid{grid-template-columns:1fr;gap:17px}.card-image{height:220px}
+      .feed-controls{align-items:stretch}.search-box{max-width:100%}.login-card{padding:32px 23px}.modal-image{height:190px}}
+  </style>
+</head>
+<body>
+  <!-- LOGIN: Firebase email/password sign-in only; no registration UI. -->
+  <section id="loginPage">
+    <div class="login-card">
+      <div class="logo">ANIME<span>VERSE</span></div>
+      <div class="login-subtitle">YOUR DAILY DOSE OF ANIME NEWS</div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to explore the latest anime updates.</p>
+      <div id="loginError" class="error-message" role="alert"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="primary-btn" id="loginBtn">Sign In</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- NEWS WEBSITE: displayed only after Firebase confirms authentication. -->
+  <div id="newsWebsite" class="hidden">
+    <header>
+      <nav class="navbar">
+        <div class="logo">ANIME<span>VERSE</span></div>
+        <div class="nav-right">
+          <span class="user-email" id="userEmail"></span>
+          <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h2 class="section-heading">Featured <span>Story</span></h2>
+      <section class="featured" id="featuredStory">
+        <img src="images/featured.jpg" alt="Featured anime story"
+             onerror="this.onerror=null;this.src='https://placehold.co/1200x600/171326/a855f7?text=Featured+Anime+Story'">
+        <div class="featured-overlay">
+          <div class="featured-content">
+            <span class="featured-label">TOP STORY</span>
+            <h1>The Anime World Never Stops Evolving</h1>
+            <p>Discover anime announcements, upcoming releases, new seasons and exciting developments from your favourite franchises.</p>
+            <button class="primary-btn" style="width:auto;padding:12px 20px" id="featuredBtn" type="button">Explore Story →</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="newsSection">
+        <div class="feed-controls">
+          <h2 class="section-heading" style="margin:0">Latest <span>News</span></h2>
+          <div class="search-box">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input type="search" id="searchInput" placeholder="Search anime news..." aria-label="Search anime news">
+          </div>
+        </div>
+
+        <div class="filter-chips" id="genreFilters" aria-label="Filter by genre">
+          <button class="chip active" data-genre="All" type="button">All</button>
+          <button class="chip" data-genre="Action" type="button">Action</button>
+          <button class="chip" data-genre="Adventure" type="button">Adventure</button>
+          <button class="chip" data-genre="Fantasy" type="button">Fantasy</button>
+          <button class="chip" data-genre="Romance" type="button">Romance</button>
+          <button class="chip" data-genre="Drama" type="button">Drama</button>
+        </div>
+        <div class="news-grid" id="newsGrid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer>© 2026 <span>ANIMEVERSE</span>. All rights reserved.<br><br>Your destination for anime news and updates.</footer>
+  </div>
+
+  <!-- News details modal. -->
+  <div class="modal" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <img class="modal-image" id="modalImage" src="" alt="News illustration">
+      <div class="modal-body">
+        <button class="modal-close" id="modalClose" type="button" aria-label="Close details">×</button>
+        <div class="card-meta">
+          <span class="genre-tag" id="modalGenre"></span>
+          <span class="card-date" id="modalDate"></span>
+        </div>
+        <div class="anime-name" id="modalAnime"></div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Authentication: modular SDK v10 via CDN. -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    // TODO: Replace every placeholder with your Firebase project settings.
+    // Firebase Console → Project settings → Your apps → SDK setup and configuration.
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Editable sample news data. Put matching image files in an /images folder.
+    const newsData = [
+      {
+        title: "Naruto: The Legacy of the Seventh Hokage",
+        anime: "Naruto", genre: "Action", image: "images/naruto.jpg",
+        description: "The Naruto franchise continues to attract fans around the world. Explore the legacy of the Seventh Hokage, his journey, friendships and the impact he left on the shinobi world. Naruto remains one of anime's most iconic adventures.",
+        date: "2026-10-25"
+      },
+      {
+        title: "One Piece: The Adventure Continues",
+        anime: "One Piece", genre: "Adventure", image: "images/onepiece.jpg",
+        description: "The Straw Hat Pirates continue their journey across the Grand Line. With mysteries surrounding the world and the legendary treasure, fans have plenty to look forward to in this ongoing adventure.",
+        date: "2026-10-24"
+      },
+      {
+        title: "Demon Slayer: The World of Hashira",
+        anime: "Demon Slayer", genre: "Action", image: "images/demonslayer.jpg",
+        description: "The Demon Slayer universe captivates audiences through its animation, memorable characters and intense battles. Discover more about the Hashira and the world they protect.",
+        date: "2026-10-23"
+      },
+      {
+        title: "Attack on Titan: Understanding the Final Story",
+        anime: "Attack on Titan", genre: "Drama", image: "images/aot.jpg",
+        description: "Attack on Titan is remembered for its complex storytelling, unexpected revelations and powerful characters. Revisit the themes and events that made this series a modern anime classic.",
+        date: "2026-10-22"
+      },
+      {
+        title: "Jujutsu Kaisen: The World of Cursed Energy",
+        anime: "Jujutsu Kaisen", genre: "Fantasy", image: "images/jujutsu.jpg",
+        description: "Jujutsu Kaisen brings supernatural battles, mysterious techniques and compelling characters together. Explore the world of cursed energy and the sorcerers who fight dangerous curses.",
+        date: "2026-10-21"
+      },
+      {
+        title: "Your Name: A Beautiful Story of Connection",
+        anime: "Your Name", genre: "Romance", image: "images/yourname.jpg",
+        description: "Your Name is celebrated for its emotional storytelling, beautiful visuals and memorable soundtrack. Its exploration of connection, distance and destiny continues to resonate with audiences.",
+        date: "2026-10-20"
+      }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const loginPage = $("loginPage");
+    const newsWebsite = $("newsWebsite");
+    const loginForm = $("loginForm");
+    const loginError = $("loginError");
+    const loginBtn = $("loginBtn");
+    const newsGrid = $("newsGrid");
+    const newsModal = $("newsModal");
+    let activeGenre = "All";
+
+    // Firebase persists the auth session; this listener restores the correct view on refresh.
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginPage.classList.add("hidden");
+        newsWebsite.classList.remove("hidden");
+        $("userEmail").textContent = user.email || "Logged in";
+        renderNews();
+      } else {
+        loginPage.classList.remove("hidden");
+        newsWebsite.classList.add("hidden");
+        $("userEmail").textContent = "";
+        closeModal();
+      }
+    });
+
+    // Sign in existing Firebase users. There is deliberately no sign-up handler or UI.
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      loginError.style.display = "none";
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Signing In...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        loginForm.reset();
+      } catch (error) {
+        console.error("Login error:", error);
+        const messages = {
+          "auth/invalid-credential": "Incorrect email or password.",
+          "auth/wrong-password": "Incorrect email or password.",
+          "auth/user-not-found": "Incorrect email or password.",
+          "auth/invalid-email": "Please enter a valid email address.",
+          "auth/too-many-requests": "Too many attempts. Please try again later.",
+          "auth/network-request-failed": "Network error. Check your internet connection.",
+          "auth/user-disabled": "This account has been disabled.",
+          "auth/operation-not-allowed": "Email/password authentication is not enabled."
+        };
+        loginError.textContent = messages[error.code] || "Login failed. Please check your credentials.";
+        loginError.style.display = "block";
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+      }
+    });
+
+    $("logoutBtn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error("Logout error:", error);
+        alert("Unable to log out. Please try again.");
+      }
+    });
+
+    function formatDate(dateString) {
+      const date = new Date(dateString + "T00:00:00");
+      return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+    }
+
+    // Render cards with DOM methods rather than injecting editable news text as HTML.
+    function renderNews(genre = "All", search = "") {
+      newsGrid.replaceChildren();
+      const term = search.toLowerCase().trim();
+      const filtered = newsData
+        .map((news, index) => ({ news, index }))
+        .filter(({ news }) => {
+          const matchesGenre = genre === "All" || news.genre === genre;
+          const matchesSearch = [news.title, news.anime, news.description, news.genre]
+            .some(value => value.toLowerCase().includes(term));
+          return matchesGenre && matchesSearch;
+        });
+
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "no-results";
+        const heading = document.createElement("h3");
+        heading.textContent = "No news found";
+        const message = document.createElement("p");
+        message.textContent = "Try another search or genre.";
+        empty.append(heading, message);
+        newsGrid.append(empty);
+        return;
+      }
+
+      filtered.forEach(({ news, index }) => {
+        const card = document.createElement("article");
+        card.className = "news-card";
+
+        const imageWrap = document.createElement("div");
+        imageWrap.className = "card-image";
+        const img = document.createElement("img");
+        img.src = news.image;
+        img.alt = news.anime;
+        img.loading = "lazy";
+        img.onerror = function () {
+          this.onerror = null;
+          this.src = "https://placehold.co/600x400/171326/a855f7?text=" + encodeURIComponent(news.anime);
+        };
+        imageWrap.append(img);
+
+        const content = document.createElement("div");
+        content.className = "card-content";
+        const meta = document.createElement("div");
+        meta.className = "card-meta";
+        const tag = document.createElement("span");
+        tag.className = "genre-tag";
+        tag.textContent = news.genre;
+        const date = document.createElement("span");
+        date.className = "card-date";
+        date.textContent = formatDate(news.date);
+        meta.append(tag, date);
+
+        const anime = document.createElement("div");
+        anime.className = "anime-name";
+        anime.textContent = news.anime;
+        const title = document.createElement("h3");
+        title.textContent = news.title;
+        const description = document.createElement("p");
+        description.textContent = news.description.length > 115
+          ? news.description.slice(0, 115) + "..." : news.description;
+        const button = document.createElement("button");
+        button.className = "read-btn";
+        button.type = "button";
+        button.textContent = "Read More →";
+        button.addEventListener("click", () => openModal(index));
+
+        content.append(meta, anime, title, description, button);
+        card.append(imageWrap, content);
+        newsGrid.append(card);
+      });
+    }
+
+    $("searchInput").addEventListener("input", (event) => {
+      renderNews(activeGenre, event.target.value);
+    });
+
+    $("genreFilters").addEventListener("click", (event) => {
+      const chip = event.target.closest(".chip");
+      if (!chip) return;
+      document.querySelectorAll(".chip").forEach(item => item.classList.remove("active"));
+      chip.classList.add("active");
+      activeGenre = chip.dataset.genre;
+      renderNews(activeGenre, $("searchInput").value);
+    });
+
+    function showDetails(news) {
+      $("modalImage").src = news.image;
+      $("modalImage").alt = news.anime;
+      $("modalImage").onerror = function () {
+        this.onerror = null;
+        this.src = "https://placehold.co/800x450/171326/a855f7?text=" + encodeURIComponent(news.anime);
+      };
+      $("modalGenre").textContent = news.genre;
+      $("modalDate").textContent = formatDate(news.date);
+      $("modalAnime").textContent = news.anime;
+      $("modalTitle").textContent = news.title;
+      $("modalDescription").textContent = news.description;
+      newsModal.classList.add("active");
+      document.body.style.overflow = "hidden";
+      $("modalClose").focus();
+    }
+
+    function openModal(index) {
+      const news = newsData[index];
+      if (news) showDetails(news);
+    }
+
+    $("featuredBtn").addEventListener("click", () => {
+      showDetails({
+        title: "The Anime World Never Stops Evolving",
+        anime: "Anime Universe",
+        genre: "News",
+        image: "images/featured.jpg",
+        date: "2026-10-30",
+        description: "Welcome to AnimeVerse, your destination for anime news, announcements, entertainment and updates. Stay connected with your favourite franchises, discover new stories and explore the world of Japanese animation."
+      });
+    });
+
+    function closeModal() {
+      newsModal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    $("modalClose").addEventListener("click", closeModal);
+    newsModal.addEventListener("click", (event) => {
+      if (event.target === newsModal) closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+  </script>
+</body>
+</html>
